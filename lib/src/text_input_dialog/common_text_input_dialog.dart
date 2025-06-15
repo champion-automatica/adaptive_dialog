@@ -5,7 +5,7 @@ import '../../adaptive_dialog.dart';
 abstract mixin class CommonTextInputDialog {
   List<DialogTextField> get textFields;
 
-  Iterable<TextEditingController> get textEditingControllers => textFields.map(
+  List<TextEditingController> get textEditingControllers => textFields.map(
         (tf) {
           final tc = TextEditingController(text: tf.initialText);
           final selection = tf.initialTextSelection;
@@ -14,5 +14,5 @@ abstract mixin class CommonTextInputDialog {
           }
           return tc;
         },
-      );
+      ).toList();
 }

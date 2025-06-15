@@ -42,13 +42,15 @@ class MaterialTextInputDialog extends StatefulWidget with CommonTextInputDialog 
 }
 
 class _MaterialTextInputDialogState extends State<MaterialTextInputDialog> {
-  late final Iterable<TextEditingController> _textControllers = widget.textEditingControllers;
+  late final List<TextEditingController> _textControllers;
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void initState() {
     super.initState();
+
+    _textControllers = widget.textEditingControllers;
   }
 
   @override

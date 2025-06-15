@@ -39,13 +39,15 @@ class IOSTextInputDialog extends StatefulWidget with CommonTextInputDialog {
 }
 
 class _IOSTextInputDialogState extends State<IOSTextInputDialog> {
-  late final List<TextEditingController> _textControllers = widget.textEditingControllers.toList();
+  late final List<TextEditingController> _textControllers;
   String? _validationMessage;
-  bool _autovalidate = false;
+  var _autovalidate = false;
 
   @override
   void initState() {
     super.initState();
+
+    _textControllers = widget.textEditingControllers;
 
     for (final c in _textControllers) {
       c.addListener(() {
