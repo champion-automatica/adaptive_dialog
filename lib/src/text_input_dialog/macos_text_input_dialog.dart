@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:intersperse/intersperse.dart';
 import 'package:macos_ui/macos_ui.dart';
 
-class MacOSTextInputDialog extends StatefulWidget {
+import 'common_text_input_dialog.dart';
+
+class MacOSTextInputDialog extends StatefulWidget with CommonTextInputDialog {
   const MacOSTextInputDialog({
     super.key,
     required this.textFields,
@@ -25,6 +27,7 @@ class MacOSTextInputDialog extends StatefulWidget {
   @override
   State<MacOSTextInputDialog> createState() => _MacOSTextInputDialogState();
 
+  @override
   final List<DialogTextField> textFields;
   final String? title;
   final String? message;
@@ -39,9 +42,7 @@ class MacOSTextInputDialog extends StatefulWidget {
 }
 
 class _MacOSTextInputDialogState extends State<MacOSTextInputDialog> {
-  late final List<TextEditingController> _textControllers = widget.textFields
-      .map((tf) => TextEditingController(text: tf.initialText))
-      .toList();
+  late final List<TextEditingController> _textControllers = widget.textEditingControllers.toList();
   String? _validationMessage;
   bool _autovalidate = false;
 
@@ -146,15 +147,10 @@ class _MacOSTextInputDialogState extends State<MacOSTextInputDialog> {
                             maxLines: field.maxLines,
                             maxLength: field.maxLength,
                             autocorrect: field.autocorrect,
-                            prefix:
-                                prefixText == null ? null : Text(prefixText),
-                            suffix:
-                                suffixText == null ? null : Text(suffixText),
-                            textInputAction:
-                                isLast ? null : TextInputAction.next,
-                            onSubmitted: isLast && widget.autoSubmit
-                                ? (_) => submitIfValid()
-                                : null,
+                            prefix: prefixText == null ? null : Text(prefixText),
+                            suffix: suffixText == null ? null : Text(suffixText),
+                            textInputAction: isLast ? null : TextInputAction.next,
+                            onSubmitted: isLast && widget.autoSubmit ? (_) => submitIfValid() : null,
                             // No spellCheckConfiguration for macos_ui
                           ),
                         ),
@@ -180,10 +176,7 @@ class _MacOSTextInputDialogState extends State<MacOSTextInputDialog> {
                         secondary: true,
                         onPressed: cancel,
                         child: Text(
-                          widget.cancelLabel ??
-                              MaterialLocalizations.of(context)
-                                  .cancelButtonLabel
-                                  .capitalizedForce,
+                          widget.cancelLabel ?? MaterialLocalizations.of(context).cancelButtonLabel.capitalizedForce,
                         ),
                       ),
                       const SizedBox(width: 14),
@@ -192,12 +185,9 @@ class _MacOSTextInputDialogState extends State<MacOSTextInputDialog> {
                         onPressed: submitIfValid,
                         secondary: widget.isDestructiveAction,
                         child: Text(
-                          widget.okLabel ??
-                              MaterialLocalizations.of(context).okButtonLabel,
+                          widget.okLabel ?? MaterialLocalizations.of(context).okButtonLabel,
                           style: TextStyle(
-                            color: widget.isDestructiveAction
-                                ? CupertinoColors.systemRed.resolveFrom(context)
-                                : null,
+                            color: widget.isDestructiveAction ? CupertinoColors.systemRed.resolveFrom(context) : null,
                           ),
                         ),
                       ),
